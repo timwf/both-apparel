@@ -1,0 +1,81 @@
+<div data-section-id="{{ section.id }}" data-section-type="slideshow-section" class="product-single__slideshow">
+    <div id="SlideshowWrapper-{{ section.id }}" class="slideshow-wrapper" role="region" aria-label="slideshow" aria-describedby="slideshow-info" tabindex="-1" data-slider>
+
+      {% assign width = height | times: product.media[0].aspect_ratio %}
+      
+      <div class="slideshow slideshow--{{ height }}{% if display_controls %} slideshow--display-controls{% endif %}"
+             id="Slideshow-{{ section.id }}"
+             data-autorotate="{{ section.settings.autorotate }}"
+             data-slider-container
+             data-speed="{{ section.settings.autorotate_speed | times: 1000 }}"
+             data-adapt-height="{% if section.settings.slideshow_height == 'adapt' %}true{% else %}false{% endif %}"
+             data-slide-nav-a11y="{{ 'sections.slideshow.load_slide' | t: slide_number: '[slide_number]' }}"
+             data-min-aspect-ratio="{{ product.media[0].aspect_ratio }}">
+            {%- for media in product.media -%}
+            {%- assign media_image = media.preview_image -%}
+            {%- assign img_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+            <div id="slickSlide-{{ media.id}}" class="slideshow__slide slideshow__slide--{{ media.id }}{% if forloop.first %} slideshow__slide--active{% endif %}" data-slider-slide-index="{{ forloop.index0 }}" data-slider-item {{ media.shopify_attributes }}>
+                {% if media_image == blank %}
+                <div class="slideshow__image js">
+                    <div class="placeholder-background">
+                        {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+                        {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                </div>
+                {% else %}
+                <img id="{{ media.id }}"
+                     class="feature-row__image lazyload{% unless featured_media == media %} lazypreload{% endunless %}"
+                     data-src="{{ img_url }}"
+                     data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                     data-aspectratio="{{ media_image.aspect_ratio }}"
+                     data-sizes="auto"
+                     alt="{{ media.alt | escape }}">
+                {% endif %}
+
+                <noscript>
+                    <div class="slideshow__image" {% if media_image %}{% unless media_image.alt== blank %} role="img" aria-label="{{ media_image.alt | escape }}" {% endunless %} style="background-image: url('{{ media_image | img_url: '2048x' }}'); background-position: {{ media.settings.alignment }};" {% endif %}>
+                        {% if media_image == blank %}
+                        <div class="placeholder-background">
+                            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </noscript>
+
+
+            </div>
+            {%- endfor -%}
+        </div>
+    </div>
+    <div class="slideshow__controls">
+        {%- if product.media.size > 1 -%}
+        {%- assign arrows_width = product.media.size | times: 18 | plus: 115 -%}
+        <div class="slideshow__arrows"
+             style="width: {{- arrows_width -}}px">
+            <button class="slideshow__arrow slideshow__arrow-previous" aria-label="{{ 'sections.slideshow.previous_slide' | t }}" data-slider-button>{% include 'icon-chevron-left' %}</button>
+            <button class="slideshow__arrow slideshow__arrow-next" aria-label="{{ 'sections.slideshow.next_slide' | t }}" data-slider-button data-slider-button-next>{% include 'icon-chevron-right' %}</button>
+
+            <ul class="slick-dots" data-slider-indicators>
+                {%- for media in product.media -%}
+                <li{% if forloop.first %} class="slick-active"{% endif %} data-slider-indicator>
+                <a href="#Slideshow-{{ section.id }}" aria-label="{{ 'sections.slideshow.load_slide' | t: slide_number: forloop.index }}" data-slide-number="{{ forloop.index0 }}" aria-controls="slickSlide-{{ media.id }}"></a>
+                </li>
+                {%- endfor -%}
+            </ul>
+        </div>
+
+        {%- if section.settings.autorotate -%}
+        <button type="button" class="slideshow__pause" data-id="{{ section.id }}" aria-live="polite" aria-pressed="false" data-slider-pause>
+            <span class="slideshow__pause-stop">
+                {% include 'icon-pause' %}
+                <span class="icon__fallback-text">{{ 'sections.slideshow.pause_slideshow' | t }}</span>
+            </span>
+            <span class="slideshow__pause-rotate">
+                {% include 'icon-play' %}
+                <span class="icon__fallback-text">{{ 'sections.slideshow.rotate_slideshow' | t }}</span>
+            </span>
+        </button>
+        {%- endif -%}
+        {%- endif -%}
+    </div>
+</div>
