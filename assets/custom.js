@@ -6,25 +6,22 @@ const getCountry = () => {
   .then(data => sortCards(data));
 
   const sortCards = (data) =>{
-    const exclusiveUsCards = document.querySelectorAll('[data-exclusive-to-us]');
-    const nonExclusiveUsCards = document.querySelectorAll('[data-not-exclusive-to-us]');
-
-    if (data.country == "US") {
-      exclusiveUsCards.forEach(function (card, index) {
-        card.style.display = 'block';
-      }); 
-      nonExclusiveUsCards.forEach(function (card, index) {
-        card.style.display = 'none';
-      }); 
-
-    }else{
-      exclusiveUsCards.forEach(function (card, index) {
-        card.style.display = 'none';
-      }); 
-      nonExclusiveUsCards.forEach(function (card, index) {
-        card.style.display = 'block';
-      }); 
-    }
+    //  data.country = "US"
+    setTimeout(function(){ 
+      const exclusiveUsCards = document.querySelectorAll('[data-exclusive-to-us]');
+      const nonExclusiveUsCards = document.querySelectorAll('[data-not-exclusive-to-us]');  
+  
+      if (data.country == "US") {  
+        nonExclusiveUsCards.forEach(function (card, index) {
+          card.remove()
+        }); 
+  
+      }else{
+        exclusiveUsCards.forEach(function (card, index) {
+          card.remove()
+        }); 
+      }
+    }, 500);
   }
 }
 

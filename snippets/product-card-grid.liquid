@@ -23,14 +23,7 @@
   {%- assign maximum_width = maximum_height | times: preview_image.aspect_ratio -%}
 
 <div class="grid-view-item{% unless product.available %} grid-view-item--sold-out{% endunless %} product-card" 
-  style="max-width:{{ maximum_width }}px;"
-
-  {% if product.metafields.my_fields.exclusive_to_us_  %}
-    data-exclusive-to-us
-    {% else %}
-    data-not-exclusive-to-us
-  {% endif %}
-  
+  style="max-width:{{ maximum_width }}px;"  
   >
   <a class="grid-view-item__link grid-view-item__image-container full-width-link" href="{{ product.url | within: collection }}">
     <span class="visually-hidden">{{ product.title }}test</span>
@@ -63,7 +56,7 @@
 
   <div class="grid">
     <div class="grid__item medium-up--one-half small--one-half">
-      <div class="h4 grid-view-item__title product-card__title" aria-hidden="true">{{ product.title }}jjj</div>
+      <div class="h4 grid-view-item__title product-card__title" aria-hidden="true">{{ product.title }}</div>
     </div>
     <div class="grid__item medium-up--one-half small--one-half text-right">
       {% include 'product-price-listing', product: product, show_vendor: show_vendor %}

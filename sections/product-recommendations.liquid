@@ -7,12 +7,33 @@
             <h2>{{ section.settings.heading | escape }}</h2>
           </div>
         {%- endif -%}
-        <ul class="grid grid--uniform grid--view-items">
-          {%- for product in recommendations.products -%}
-            <li class="grid__item small--one-half medium-up--one-quarter">
-              {% include 'product-card-grid', max_height: 250, product: product, show_vendor: section.settings.show_vendor %}
-            </li>
-          {%- endfor -%}
+        <ul class="grid grid--uniform grid--view-items"     
+        >
+
+
+          {% assign count = 0 %}
+
+          {% for rec_product in product.collections[0].products %}
+          {% if count <= 9 %}
+            {% if rec_product.title != product.title %}
+              {% assign count = count | plus: 1 %}
+              <li class="grid__item small--one-half medium-up--one-quarter"  
+
+              {% if rec_product.metafields.my_fields.exclusive_to_us_  %}
+              data-exclusive-to-us
+              {% else %}
+              data-not-exclusive-to-us
+            {% endif %}
+              
+              
+              >
+                {% include 'product-card-grid', max_height: 250, product: rec_product, show_vendor: section.settings.show_vendor %}
+              </li>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+
         </ul>
       </div>
     {%- endif -%}

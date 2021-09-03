@@ -17,7 +17,7 @@
   {%- assign limit = 16 -%}
 {% endif %}
 
-{% paginate collection.products by limit %}
+
 
 <div data-section-id="{{ section.id }}" data-section-type="collection-template">
   <header class="collection-header">
@@ -143,7 +143,16 @@
 
       <ul class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
         {% for product in collection.products %}
-          <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+
+          <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}"
+
+          {% if product.metafields.my_fields.exclusive_to_us_  %}
+          data-exclusive-to-us
+          {% else %}
+          data-not-exclusive-to-us
+        {% endif %}
+          
+          >
             {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor %}
           </li>
         {% else %}
@@ -235,7 +244,7 @@
   </div>
 </div>
 
-{% endpaginate %}
+
 
 
 
